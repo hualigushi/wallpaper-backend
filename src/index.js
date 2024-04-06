@@ -4,20 +4,16 @@ const { koaBody } = require('koa-body');
 const cors = require('@koa/cors');
 const { PrismaClient } = require('@prisma/client')
 const OSS = require('ali-oss');
-const { STS } = require('ali-oss');
 const path=require("path")
 const http = require("http");
 const https = require("https");
 const fs = require("fs");
 
-const {listBuckets,listImgsWithPrefix,deleteImg,deleteImgsWithPrefix} = require('./oss')
+const {listBuckets,listImgsWithPrefix,deleteImg,deleteImgsWithPrefix,initialSts} = require('./oss')
 
 const app = new Koa()
 const router = new Router()
 const prisma = new PrismaClient()
-
-const accessKeyId = 'LTAI5tKEJY6tAioCB2MmcxoP';
-const accessKeySecret = 'zBw2BoPGBlf0UGMSgI5wH5iiJ84e0o';
 
 const arn = 'acs:ram::1753422922186288:role/ramosstest'
 
@@ -421,10 +417,7 @@ router.post('/addOrUpdateProtocol', async (ctx) => {
 })
 
 router.get('/get_sts_token_for_oss_upload', async (ctx) => {
-  let sts = new STS({
-   accessKeyId: accessKeyId,
-   accessKeySecret: accessKeySecret
- });
+  let sts = initialSts()
    // roleArn填写步骤2获取的角色ARN，例如acs:ram::175708322470****:role/ramtest。
    // policy填写自定义权限策略，用于进一步限制STS临时访问凭证的权限。如果不指定Policy，则返回的STS临时访问凭证默认拥有指定角色的所有权限。
    // 3000为过期时间，单位为秒。
@@ -548,7 +541,7 @@ router.post('/mobile/getWallpaperImgsList', async (ctx) => {
 
 app.use(router.routes()).use(router.allowedMethods())
 
-app.listen(3000, () =>
+app.listen(3001, () =>
   console.log(`
-🚀 Server ready at: http://localhost:3000`),
+🚀 Server ready at: http://localhost:3001`),
 )

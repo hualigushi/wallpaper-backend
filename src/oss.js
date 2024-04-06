@@ -1,8 +1,11 @@
 const OSS = require('ali-oss');
+require('dotenv').config();
 
-const accessKeyId = 'LTAI5tKEJY6tAioCB2MmcxoP';
+const accessKeyId = process.env.ACCESS_KEY_ID; 
 // 配置环境变量ALIBABA_CLOUD_ACCESS_SECRET。
-const accessKeySecret = 'zBw2BoPGBlf0UGMSgI5wH5iiJ84e0o';
+const accessKeySecret = process.env.ACCESS_KEY_SECRET; 
+
+const arn = 'acs:ram::1753422922186288:role/ramosstest'
 
 // 初始化OSS客户端。请将以下参数替换为您自己的配置信息。
 const client = new OSS({
@@ -37,6 +40,14 @@ const deleteImg = async (name) => {
      return await client.delete(name);
   }
 
+  const initialSts=()=>{
+    let sts = new STS({
+      accessKeyId: accessKeyId,
+      accessKeySecret: accessKeySecret
+    });
+    return  sts
+  }
+
   //删除指定前缀的多个文件
   const deleteImgsWithPrefix=async (prefix) =>{
     const list = await listImgsWithPrefix(prefix);
@@ -50,3 +61,4 @@ exports.listBuckets = listBuckets;
 exports.listImgsWithPrefix = listImgsWithPrefix;
 exports.deleteImg = deleteImg;
 exports.deleteImgsWithPrefix = deleteImgsWithPrefix;
+exports.initialSts = initialSts;
