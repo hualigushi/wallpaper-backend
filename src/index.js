@@ -24,14 +24,6 @@ const arn = 'acs:ram::1753422922186288:role/ramosstest'
 const pageSize = 10; // 每页10个壁纸
 const pageNumber = 1; // 第一页
 
-// 初始化OSS客户端。请将以下参数替换为您自己的配置信息。
-const client = new OSS({
-  region: 'oss-cn-hangzhou', // 示例：'oss-cn-hangzhou'，填写Bucket所在地域。
-  accessKeyId, // 确保已设置环境变量OSS_ACCESS_KEY_ID。
-  accessKeySecret, // 确保已设置环境变量OSS_ACCESS_KEY_SECRET。
-  bucket: 'bzgxs-wallpaper', // 示例：'my-bucket-name'，填写存储空间名称。
-});
-
 app.use(koaBody()).use(cors());
 
 router.post('/getCollectionList', async (ctx) => {
@@ -555,18 +547,6 @@ router.post('/mobile/getWallpaperImgsList', async (ctx) => {
 })
 
 app.use(router.routes()).use(router.allowedMethods())
-
-async function get() {
-  try {
-    // 填写Object完整路径和本地文件的完整路径。Object完整路径中不能包含Bucket名称。
-    // 如果指定的本地文件存在会覆盖，不存在则新建。
-    // 如果未指定本地路径，则下载后的文件默认保存到示例程序所属项目对应本地路径中。
-    const result = await client.get('wallpaper/柯达-01.jpg');
-    console.log(result);
-  } catch (e) {
-    console.log(e);
-  }
-}
 
 app.listen(3000, () =>
   console.log(`
