@@ -17,7 +17,6 @@ const router = new Router()
 const prisma = new PrismaClient()
 
 const accessKeyId = 'LTAI5tKEJY6tAioCB2MmcxoP';
-// 配置环境变量ALIBABA_CLOUD_ACCESS_SECRET。
 const accessKeySecret = 'zBw2BoPGBlf0UGMSgI5wH5iiJ84e0o';
 
 const arn = 'acs:ram::1753422922186288:role/ramosstest'
