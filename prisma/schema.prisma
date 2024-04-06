@@ -1,0 +1,75 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// model User {
+//   id    Int     @id @default(autoincrement())
+//   email String  @unique
+//   name  String?
+//   posts Post[]
+// }
+
+// model Post {
+//   id        Int      @id @default(autoincrement())
+//   createdAt DateTime @default(now())
+//   updatedAt DateTime @updatedAt
+//   title     String
+//   content   String?
+//   published Boolean  @default(false)
+//   viewCount Int      @default(0)
+//   author    User?    @relation(fields: [authorId], references: [id])
+//   authorId  Int?
+// }
+
+model Author {
+  id         String      @id @unique @default(uuid())
+  name       String      @unique
+  createdAt  DateTime    @default(now())
+  updatedAt  DateTime    @updatedAt
+  wallpapers Wallpaper[]
+}
+
+model Wallpaper {
+  id            String      @id @unique @default(uuid())
+  title         String      @unique
+  enTitle       String      @unique
+  tags          String
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+  published     Boolean     @default(false)
+  downloadCount Int         @default(0)
+  author        Author      @relation(fields: [authorId], references: [id])
+  authorId      String
+  Collection    Collection? @relation(fields: [collectionId], references: [id])
+  collectionId  String
+}
+
+model Collection {
+  id            String      @id @default(uuid())
+  title         String      @unique
+  enTitle       String      @unique
+  description   String?
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+  downloadCount Int         @default(0)
+  wallpaperList Wallpaper[]
+}
+
+model Protocol {
+  id            String @id @default(uuid())
+  privacyPolicy String
+  termsOfService    String
+  aboutUs       String
+  followUs      String
+  followJike    String
+  followX       String
+  followWeibo   String
+}
